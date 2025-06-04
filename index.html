@@ -1,0 +1,421 @@
+
+original_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Aleksandra ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #ffb6c1, #ff4d4d);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 4rem;
+      margin: 0.5rem 0;
+      animation: fadeInDown 1.5s ease-out;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      max-width: 700px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease-in;
+    }
+
+    .emojis {
+      font-size: 3rem;
+      margin: 2rem 0;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      animation: fadeInUp 2s ease-out;
+      text-align: center;
+    }
+
+    .floating-heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/1200px-Heart_coraz%C3%B3n.svg.png') no-repeat center center / contain;
+      animation: floatHeart 10s linear infinite;
+      opacity: 0.7;
+    }
+
+    .gift-button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      background-color: #fff;
+      color: #ff4d4d;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .gift-button:hover {
+      transform: scale(1.1);
+    }
+
+    .gift-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      z-index: 1000;
+      animation: popupBounce 0.6s ease-out;
+      width: 350px;
+      max-width: 90vw;
+      user-select: none;
+    }
+
+    .gift-popup h2 {
+      color: #d32f2f;
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+      user-select: none;
+    }
+
+    .envelope {
+      width: 180px;
+      height: 120px;
+      margin: 0 auto 1.5rem auto;
+      cursor: pointer;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .envelope-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+    }
+
+    .envelope.open .envelope-inner {
+      transform: rotateX(-140deg);
+    }
+
+    .envelope-front,
+    .envelope-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      backface-visibility: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .envelope-front {
+      background: #fff0f0;
+      background-image: linear-gradient(135deg, #ff8a8a, #ff4d4d);
+      border: 2px solid #d32f2f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      color: #d32f2f;
+      user-select: none;
+      transform-origin: top center;
+      box-shadow: 0 0 10px #ff4d4daa;
+      position: relative;
+      z-index: 2;
+    }
+
+    .envelope-front::before {
+      content: "💌";
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4.5rem;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 2px #d32f2f);
+    }
+
+    .envelope-back {
+      background: #fff6f6;
+      border: 2px solid #d32f2f;
+      transform: rotateX(180deg);
+      border-radius: 0 0 15px 15px;
+    }
+
+    .letter {
+      font-size: 1.15rem;
+      color: #333;
+      line-height: 1.4;
+      text-align: left;
+      max-height: 220px;
+      overflow: hidden;
+      padding: 10px 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      user-select: text;
+      white-space: pre-wrap;
+      margin: 0 auto;
+      width: 90%;
+    }
+
+    .flip-card {
+      background: transparent;
+      width: 160px;
+      height: 200px;
+      perspective: 1000px;
+      margin: 1rem;
+      display: inline-block;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 1rem;
+    }
+
+    .flip-card-front {
+      background: #ff4d4d;
+      color: white;
+    }
+
+    .flip-card-back {
+      background: #fff;
+      color: #ff4d4d;
+      transform: rotateY(180deg);
+    }
+
+    .card-container {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .close-button {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      background: #d32f2f;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    .close-button:hover {
+      background-color: #b02626;
+    }
+
+    @keyframes floatHeart {
+      0% { bottom: -50px; opacity: 0; transform: translateX(0) scale(0.8); }
+      50% { opacity: 1; }
+      100% { bottom: 100%; opacity: 0; transform: translateX(-50px) scale(1.2); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popupBounce {
+      0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+      60% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>For Aleksandra ❤️</h1>
+    <div class="emojis">💖 💐 💕</div>
+    <p>Thank you for always being there with your happiness and beauty.</p>
+    <p>You’re always in the center of my heart, you’re the girl I am always thinking of, you're the girl of my dreams</p>
+    <p>I made this little website just to show how much I love and respect you! 💐</p>
+    <button class="gift-button" onclick="showGift()">Gift for you 💖</button>
+  </div>
+
+  <div id="cardContainer" class="card-container"></div>
+
+  <div class="floating-heart" style="left: 10%; animation-delay: 0s;"></div>
+  <div class="floating-heart" style="left: 35%; animation-delay: 1s;"></div>
+  <div class="floating-heart" style="left: 55%; animation-delay: 2s;"></div>
+  <div class="floating-heart" style="left: 75%; animation-delay: 3s;"></div>
+  <div class="floating-heart" style="left: 25%; animation-delay: 4s;"></div>
+
+  <div id="giftPopup" class="gift-popup">
+    <h2>A gift for u alq 🌹</h2>
+    <div class="envelope" id="envelope">
+      <div class="envelope-inner">
+        <div class="envelope-front"></div>
+        <div class="envelope-back"></div>
+      </div>
+    </div>
+    <div id="letter" class="letter" style="display:none;"></div>
+    <button class="close-button" onclick="closeGift()">Close</button>
+  </div>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const giftPopup = document.getElementById('giftPopup');
+    const letter = document.getElementById('letter');
+    let isOpen = false;
+
+    const letterText = `Dear Alq 🌹,
+
+I may not be the best guy, but I will try to improve myself in the right way.
+Even if you don’t want to be my girlfriend, I will always be glad I told you this.
+I like you more than words can say.
+My heart is forever yours 💖`;
+
+    function showGift() {
+      giftPopup.style.display = 'block';
+      isOpen = false;
+      letter.style.display = 'none';
+      letter.textContent = '';
+      envelope.classList.remove('open');
+    }
+
+    envelope.addEventListener('click', () => {
+      if (isOpen) return;
+      isOpen = true;
+      envelope.classList.add('open');
+      typeLetter(letterText);
+    });
+
+    function closeGift() {
+      giftPopup.style.display = 'none';
+      isOpen = false;
+      letter.textContent = '';
+      envelope.classList.remove('open');
+    }
+
+    function typeLetter(text) {
+      letter.style.display = 'block';
+      let i = 0;
+      letter.textContent = '';
+      function typing() {
+        if (i < text.length) {
+          letter.textContent += text.charAt(i);
+          i++;
+          setTimeout(typing, 40);
+        }
+      }
+      typing();
+    }
+
+    // Flip card logic
+    const cardContainer = document.getElementById('cardContainer');
+    const cardMessages = [
+      "You make me laugh",
+      "You're my home",
+      "You light up my world",
+      "You’re everything I ever wanted",
+      "Your smile is my favorite thing",
+      "You're magic",
+      "You’re my sunshine",
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createCard(message) {
+      const flipCard = document.createElement('div');
+      flipCard.className = 'flip-card';
+      flipCard.onclick = () => flipCard.classList.toggle('flipped');
+
+      const inner = document.createElement('div');
+      inner.className = 'flip-card-inner';
+
+      const front = document.createElement('div');
+      front.className = 'flip-card-front';
+      front.textContent = '❤️';
+
+      const back = document.createElement('div');
+      back.className = 'flip-card-back';
+      back.textContent = message;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      flipCard.appendChild(inner);
+      return flipCard;
+    }
+
+    window.onload = () => {
+      const shuffled = shuffle([...cardMessages]);
+      shuffled.forEach(msg => {
+        cardContainer.appendChild(createCard(msg));
+      });
+    };
+  </script>
+</body>
+</html>"""
